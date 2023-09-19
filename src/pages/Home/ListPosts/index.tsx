@@ -2,7 +2,7 @@ import { Card } from "../../../components/Card";
 
 export function ListPosts() {
     return (
-        <section className="w-full mt-12 grid grid-cols-2 gap-8 pb-36">
+        <section className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 pb-36">
             <Card
                 title="JavaScript data types and data structures"
                 date="Há 1 dia"

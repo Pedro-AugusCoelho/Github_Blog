@@ -8,7 +8,7 @@ export function Home(){
         <div className="bg-base-background flex flex-col min-h-screen">
             <Header />
             
-            <div className="flex-1 w-1/2 m-auto">
+            <div className="flex-1 w-4/5 xl:w-1/2 m-auto">
                 <Profile />
                 <SearchForm />
                 <ListPosts />

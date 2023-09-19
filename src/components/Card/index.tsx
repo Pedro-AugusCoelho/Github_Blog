@@ -13,9 +13,9 @@ export function Card({title, date, resume}:CardProps) {
 
     return (
         <NavLink to={`/post/${id}`} title="post">
-            <div className="max-h-64 p-8 bg-base-post shadow-sm rounded-lg cursor-pointer border-[transparent] border-2 hover:border-base-label">
+            <div className="p-8 gap-2 bg-base-post shadow-sm rounded-lg cursor-pointer border-[transparent] border-2 hover:border-base-label">
                 <header className="flex justify-between items-start mb-5">
-                    <div className="text-base-title font-bold text-xl font-nunito">
+                    <div className="text-base-title font-bold text-xl font-nunito flex-1">
                         {title}
                     </div>
                     
