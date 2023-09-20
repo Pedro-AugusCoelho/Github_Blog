@@ -36,8 +36,25 @@ interface UserGithub {
     updated_at: string
 }
 
+interface Items {
+    id: number
+    number: number
+    title: string
+    created_at: string
+    updated_at: string
+    body: string
+    score: number
+}
+
+interface PostList {
+    total_count: number
+    items: Items[]
+}
+
 interface BlogContextType {
-    user: UserGithub
+    user: UserGithub;
+    postList: PostList;
+    getIssuesOnGithub: (search?: string) => Promise<void>;
 }
 
 export const BlogContext = createContext({} as BlogContextType)
@@ -50,8 +67,9 @@ interface blogContextProviderProps {
 export function BlogContextProvider({children}:blogContextProviderProps) {
 
     const [ user, setUser ] = useState({} as UserGithub)
+    const [ postList, setPostList ] = useState({} as PostList)
 
-    async function handleGetUserOnGithub () {
+    async function getUserOnGithub () {
         const response = await api.get('users/Pedro-AugusCoelho')
 
         if (response.status === 200) {
@@ -59,12 +77,27 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
         }
     }
 
+    async function getIssuesOnGithub (search?:string) {
+        const response = await api.get('search/issues', {
+            params: {
+                q: search ? `${search} repo:Pedro-AugusCoelho/Github_Blog&per_page=10&page=1&sort=created&order=desc` : 'repo:Pedro-AugusCoelho/Github_Blog&per_page=10&page=1&sort=created&order=desc',
+            }
+        })
+
+        if (response.status === 200) {
+            setPostList(response.data)
+        }
+    }
+
     useEffect(() => {
-        handleGetUserOnGithub()
+        getUserOnGithub()
+        if (user) {
+            getIssuesOnGithub()
+        }  
     },[])
 
     return (
-        <BlogContext.Provider value={ { user } }>
+        <BlogContext.Provider value={ { user, postList, getIssuesOnGithub } }>
             {children}
         </BlogContext.Provider>
     )

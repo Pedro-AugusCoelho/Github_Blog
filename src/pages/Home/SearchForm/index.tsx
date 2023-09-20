@@ -1,4 +1,8 @@
+import { useContext } from "react"
+import { BlogContext } from "../../../context/BlogContext"
+
 export function SearchForm() {
+    const { postList } = useContext(BlogContext)
     return (
         <div className="w-full mt-20">
             <header className="flex justify-between items-center mb-3 ">
@@ -7,7 +11,8 @@ export function SearchForm() {
                 </span>
                 
                 <span className="text-sm text-base-span font-nunito">
-                    6 publicações
+                    {postList.total_count === 1 && <>{postList.total_count} publicação</>}
+                    {postList.total_count > 1 && <>{postList.total_count} Publicações</>}
                 </span>
             </header>
             
