@@ -5,12 +5,12 @@ interface CardProps {
     title: string
     date: string
     resume: string
+    id: number
 }
 
-export function Card({title, date, resume}:CardProps) {
+export function Card({title, date, resume, id}:CardProps) {
 
     const resumeFormatted = resume.slice(0, 130) + '...';
-    const id = 1
 
     // AJUSTANDO A DATA
     const datePostCreated = new Date(date);

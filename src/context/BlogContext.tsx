@@ -44,6 +44,8 @@ interface Items {
     updated_at: string
     body: string
     score: number
+    comments: number,
+    html_url: string,
 }
 
 interface PostList {
@@ -54,7 +56,9 @@ interface PostList {
 interface BlogContextType {
     user: UserGithub;
     postList: PostList;
+    post: Items;
     getIssuesOnGithub: (search?: string) => Promise<void>;
+    getIssueOnGithub: (idIssue:string) => Promise<void>;
 }
 
 export const BlogContext = createContext({} as BlogContextType)
@@ -68,6 +72,7 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
 
     const [ user, setUser ] = useState({} as UserGithub)
     const [ postList, setPostList ] = useState({} as PostList)
+    const [ post, setPost ] = useState({} as Items)
 
     async function getUserOnGithub () {
         const response = await api.get('users/Pedro-AugusCoelho')
@@ -80,12 +85,22 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
     async function getIssuesOnGithub (search?:string) {
         const response = await api.get('search/issues', {
             params: {
-                q: search ? `${search} repo:Pedro-AugusCoelho/Github_Blog&per_page=10&page=1&sort=created&order=desc` : 'repo:Pedro-AugusCoelho/Github_Blog&per_page=10&page=1&sort=created&order=desc',
+                q: search ? `${search} repo:Pedro-AugusCoelho/Github_Blog` : 'repo:Pedro-AugusCoelho/Github_Blog',
             }
         })
 
         if (response.status === 200) {
             setPostList(response.data)
+        }
+    }
+
+    async function getIssueOnGithub (idIssue:string) {
+        if (idIssue) {
+            const response = await api.get(`/repos/Pedro-AugusCoelho/Github_Blog/issues/${idIssue}`)
+
+            if (response.status === 200) {
+                setPost(response.data)
+            }
         }
     }
 
@@ -97,7 +112,7 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
     },[])
 
     return (
-        <BlogContext.Provider value={ { user, postList, getIssuesOnGithub } }>
+        <BlogContext.Provider value={ { user, postList, post, getIssuesOnGithub, getIssueOnGithub } }>
             {children}
         </BlogContext.Provider>
     )

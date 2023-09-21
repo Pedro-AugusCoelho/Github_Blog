@@ -2,11 +2,39 @@ import { ArrowSquareIn, CaretLeft } from "@phosphor-icons/react";
 import { Header } from "../../components/Header";
 import { LongCardInfo } from "../../components/LongCardInfo";
 import { ProfileIcon } from "../../components/ProfileIcon";
+import { BlogContext } from "../../context/BlogContext";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useContext, useEffect } from "react";
+import { formatDistanceToNow } from "date-fns";
+
+import ReactMarkdown from "react-markdown";
 
 export function Post() {
     const navigation = useNavigate();
+
+    const { user, post, getIssueOnGithub } = useContext(BlogContext);
+
+    const { id } = useParams();
+
+    function handleGetIssueOnGithub() {
+        if (id) {
+            getIssueOnGithub(id)
+        }
+    }
+
+    useEffect(() => {
+        handleGetIssueOnGithub()
+    },[id]);
+
+    // AJUSTANDO A DATA
+    const datePostCreated = post.created_at ? new Date(post.created_at) : null;
+    const daysOfDifference = datePostCreated ? formatDistanceToNow(new Date(datePostCreated),{
+        addSuffix: true,
+      }) : '';
+
+    // AJUSTANDO A QUANTIDADE DE COMENTARIOS
+    const amountComment = post.comments ? post.comments === 1 ? `${post.comments} Comentário`  : `${post.comments} Comentários` : '0 Comentários'
 
     const handleBackPage = () => {
         navigation(-1); // Volta para a página anterior
@@ -26,8 +54,7 @@ export function Post() {
                             </div>
 
                             <div className="border-b-2 border-[transparent] py-[1px] hover:border-blue">
-                                {/* TROCAR O LINK PARA LEVAR DIRETO AO POST */}
-                                <a href="https://github.com/" target='_blank' className='flex items-center text-blue gap-1'>
+                                <a href={post.html_url} target='_blank' className='flex items-center text-blue gap-1'>
                                     <span className='font-bold'>VER NO GITHUB</span>
                                     <ArrowSquareIn size={24} weight="fill" />
                                 </a>
@@ -35,16 +62,23 @@ export function Post() {
                         </header>
 
                         <div className="w-full font-nunito text-2xl text-base-title mt-5">
-                            JavaScript data types and data structures
+                            {post.title}
                         </div>
 
                         <footer className='mt-5 flex gap-6'>
-                            <ProfileIcon icon='github' title='Pedro-AugusCoelho' />
-                            <ProfileIcon icon='date' title='Há um dia' />
-                            <ProfileIcon icon='comment' title='32 comentários' />
+                            <ProfileIcon icon='github' title={user.login} />
+                            <ProfileIcon icon='date' title={daysOfDifference} />
+                            <ProfileIcon icon='comment' title={amountComment} />
                         </footer>
                     </div>
                 </LongCardInfo>
+
+                
+                <ReactMarkdown 
+                    className="text-base-text text-justify my-10 px-8" 
+                    children={post.body}
+                />
+                
             </div>
         </div>
     )

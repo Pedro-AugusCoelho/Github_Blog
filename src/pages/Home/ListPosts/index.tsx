@@ -13,6 +13,8 @@ export function ListPosts() {
                         title={post.title}
                         date={post.created_at}
                         resume={post.body}
+                        id={post.number}
+                        key={post.id}
                     />
                 )
             })
