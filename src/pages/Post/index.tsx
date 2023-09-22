@@ -44,7 +44,7 @@ export function Post() {
         <div className="bg-base-background flex flex-col min-h-screen">
             <Header />
             
-            <div className="flex-1 w-1/2 m-auto">
+            <div className="flex-1 w-4/5 xl:w-1/2 m-auto">
                 <LongCardInfo>
                     <div className="w-full">
                         <header className="flex justify-between items-center text-blue font-nunito text-xs font-bold w-full">
@@ -61,11 +61,11 @@ export function Post() {
                             </div>
                         </header>
 
-                        <div className="w-full font-nunito text-2xl text-base-title mt-5">
+                        <div className="w-full font-nunito text-xl sm:text-2xl text-base-title mt-5">
                             {post.title}
                         </div>
 
-                        <footer className='mt-5 flex gap-6'>
+                        <footer className='mt-5 flex gap-6 grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2'>
                             <ProfileIcon icon='github' title={user.login} />
                             <ProfileIcon icon='date' title={daysOfDifference} />
                             <ProfileIcon icon='comment' title={amountComment} />
@@ -75,7 +75,7 @@ export function Post() {
 
                 
                 <ReactMarkdown 
-                    className="text-base-text text-justify my-10 px-8" 
+                    className="text-base-text text-justify my-10 px-4 sm:px-8" 
                     children={post.body}
                 />
                 

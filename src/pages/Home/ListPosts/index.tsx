@@ -7,7 +7,7 @@ export function ListPosts() {
 
     return (
         <section className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 pb-36">
-            {postList.total_count > 1 && postList.items.map(post => {
+            {postList.total_count > 0 && postList.items.map(post => {
                 return (
                     <Card
                         title={post.title}

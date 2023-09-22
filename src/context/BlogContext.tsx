@@ -74,8 +74,11 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
     const [ postList, setPostList ] = useState({} as PostList)
     const [ post, setPost ] = useState({} as Items)
 
+    const githubUser = import.meta.env.VITE_REACT_APP_GITHUB_USER
+    const githubRepo = import.meta.env.VITE_REACT_APP_GITHUB_REPO
+
     async function getUserOnGithub () {
-        const response = await api.get('users/Pedro-AugusCoelho')
+        const response = await api.get(`users/${githubUser}`)
 
         if (response.status === 200) {
             setUser(response.data)
@@ -85,7 +88,7 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
     async function getIssuesOnGithub (search?:string) {
         const response = await api.get('search/issues', {
             params: {
-                q: search ? `${search} repo:Pedro-AugusCoelho/Github_Blog` : 'repo:Pedro-AugusCoelho/Github_Blog',
+                q: search ? `${search} repo:${githubUser}/${githubRepo}` : `repo:${githubUser}/${githubRepo}`,
             }
         })
 
@@ -96,7 +99,7 @@ export function BlogContextProvider({children}:blogContextProviderProps) {
 
     async function getIssueOnGithub (idIssue:string) {
         if (idIssue) {
-            const response = await api.get(`/repos/Pedro-AugusCoelho/Github_Blog/issues/${idIssue}`)
+            const response = await api.get(`/repos/${githubUser}/${githubRepo}/issues/${idIssue}`)
 
             if (response.status === 200) {
                 setPost(response.data)
